@@ -4,7 +4,7 @@
  * Permite guardar una imagen con una RBN generada aleatoriamente
  */
  
-RBN net; 
+RBNet net; 
 PrintWriter output;
 
 void setup() {
@@ -21,7 +21,7 @@ void setup() {
           network[i][j] = int(random(2)); // aleatorizamos el valor inicial del nodo
         else
           network[i][j] = int(random(20)); // aleatorizamos las referencias a otros nodos  
-  net = new RBN(rules, network);  
+  net = new RBNet(rules, network);  
   background(0);
   output = createWriter("regla_usada.txt");
 }

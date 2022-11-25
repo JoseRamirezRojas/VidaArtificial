@@ -13,73 +13,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 
-public class RandomBinaryNetwork extends PApplet {
+public class RBN extends PApplet {
 
-/**
- * Ejecución de Random Boolean Network de Stuart A.Kauffman 
- * 
- * Permite guardar una imagen con una RBN generada aleatoriamente
- */
- 
-RBN net; 
-PrintWriter output;
-
- public void setup() {
-  /* size commented out by preprocessor */;
-  frameRate(24);
-  int[] rules = new int[8]; 
-  int[][] network = new int[20][4]; 
-   for (int i = 0; i < 8; i++) {
-      rules[i] = PApplet.parseInt(random(2)); // aleatorizamos el valor de la regla inicial
-    }
-  for (int i = 0; i < 20; i++) 
-      for (int j = 0; j < 4; j++)
-        if (j == 0)
-          network[i][j] = PApplet.parseInt(random(2)); // aleatorizamos el valor inicial del nodo
-        else
-          network[i][j] = PApplet.parseInt(random(20)); // aleatorizamos las referencias a otros nodos  
-  net = new RBN(rules, network);  
-  background(0);
-  output = createWriter("regla_usada.txt");
-}
-
- public void draw() {
-  net.render();  // dibujamos 
-  net.generate();  // creamos nuevas generaciones
-  
-  if(net.lastGen()){
-    // si se deja correr la animacion hasta la última generacion se guarda la imagen del automata
-    save("random_boolean_net.jpg");  
-    noLoop(); // detenemos la generación
-    // reportamos que regla se usó en el automata generado
-    output.println("000 -> " + net.reglas[0]);
-    output.println("001 -> " + net.reglas[1]);
-    output.println("010 -> " + net.reglas[2]);
-    output.println("011 -> " + net.reglas[3]);
-    output.println("100 -> " + net.reglas[4]);
-    output.println("101 -> " + net.reglas[5]);
-    output.println("110 -> " + net.reglas[6]);
-    output.println("111 -> " + net.reglas[7]); 
-    output.flush();  // escribimos y guardamos al archivo
-    output.close(); // cerramos el archivo
-  }
-    
-}
-
- public void mousePressed() {
-  background(0);
-  net.randomizeRules();
-  net.randomizeNet();
-  net.restart(); // al hacer clic se genera otro automata con otras reglas (aleatorias)
-  output = createWriter("regla_usada.txt"); //reabrimos el archivo para escribir la nueva regla
-  loop(); //reanudamos el método draw()
-}
 /**
  Abstraccion de un automata celular
  
  Jose David Ramirez Rojas
  */
-class RBN {
+class RBNet {
 
   int[] celdas;  
   int[] reglas; 
@@ -88,7 +29,7 @@ class RBN {
   boolean generacionMutada;
   int nodoMutado;
 
-  RBN(int[] rules, int[][] network) {
+  RBNet(int[] rules, int[][] network) {
     reglas = rules;
     red = network;
     celdas = new int[20];  // hay 20 celdas, cada una es el estado de un nodo de la red
@@ -171,10 +112,6 @@ class RBN {
     generacion++;
   }
   
-   public void mutation() {
-    
-  }
-  
    public boolean lastGen() {
     if (generacion > width) {
        return true; // paramos con tantas generaciones como la pantalla permita
@@ -183,12 +120,71 @@ class RBN {
     }
   }
 }
+/**
+ * Ejecución de Random Boolean Network de Stuart A.Kauffman 
+ * 
+ * Permite guardar una imagen con una RBN generada aleatoriamente
+ */
+ 
+RBNet net; 
+PrintWriter output;
+
+ public void setup() {
+  /* size commented out by preprocessor */;
+  frameRate(24);
+  int[] rules = new int[8]; 
+  int[][] network = new int[20][4]; 
+   for (int i = 0; i < 8; i++) {
+      rules[i] = PApplet.parseInt(random(2)); // aleatorizamos el valor de la regla inicial
+    }
+  for (int i = 0; i < 20; i++) 
+      for (int j = 0; j < 4; j++)
+        if (j == 0)
+          network[i][j] = PApplet.parseInt(random(2)); // aleatorizamos el valor inicial del nodo
+        else
+          network[i][j] = PApplet.parseInt(random(20)); // aleatorizamos las referencias a otros nodos  
+  net = new RBNet(rules, network);  
+  background(0);
+  output = createWriter("regla_usada.txt");
+}
+
+ public void draw() {
+  net.render();  // dibujamos 
+  net.generate();  // creamos nuevas generaciones
+  
+  if(net.lastGen()){
+    // si se deja correr la animacion hasta la última generacion se guarda la imagen del automata
+    save("random_boolean_net.jpg");  
+    noLoop(); // detenemos la generación
+    // reportamos que regla se usó en el automata generado
+    output.println("000 -> " + net.reglas[0]);
+    output.println("001 -> " + net.reglas[1]);
+    output.println("010 -> " + net.reglas[2]);
+    output.println("011 -> " + net.reglas[3]);
+    output.println("100 -> " + net.reglas[4]);
+    output.println("101 -> " + net.reglas[5]);
+    output.println("110 -> " + net.reglas[6]);
+    output.println("111 -> " + net.reglas[7]); 
+    output.flush();  // escribimos y guardamos al archivo
+    output.close(); // cerramos el archivo
+  }
+    
+}
+
+ public void mousePressed() {
+  background(0);
+  net.randomizeRules();
+  net.randomizeNet();
+  net.restart(); // al hacer clic se genera otro automata con otras reglas (aleatorias)
+  output = createWriter("regla_usada.txt"); //reabrimos el archivo para escribir la nueva regla
+  loop(); //reanudamos el método draw()
+}
 
 
   public void settings() { size(1170, 550); }
 
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "RandomBinaryNetwork" };
+    String[] appletArgs = new String[] { "RBN" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

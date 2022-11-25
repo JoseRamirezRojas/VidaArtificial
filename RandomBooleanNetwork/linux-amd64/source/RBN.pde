@@ -3,7 +3,7 @@
  
  Jose David Ramirez Rojas
  */
-class RBN {
+class RBNet {
 
   int[] celdas;  
   int[] reglas; 
@@ -12,7 +12,7 @@ class RBN {
   boolean generacionMutada;
   int nodoMutado;
 
-  RBN(int[] rules, int[][] network) {
+  RBNet(int[] rules, int[][] network) {
     reglas = rules;
     red = network;
     celdas = new int[20];  // hay 20 celdas, cada una es el estado de un nodo de la red
@@ -93,10 +93,6 @@ class RBN {
       red[i][0] = nextGen[i];
     }  
     generacion++;
-  }
-  
-  void mutation() {
-    
   }
   
   boolean lastGen() {
